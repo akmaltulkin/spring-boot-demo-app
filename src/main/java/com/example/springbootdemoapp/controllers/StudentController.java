@@ -36,4 +36,9 @@ public class StudentController {
     public List<Student> second(){
         return studentService.get100RandomStudents();
     }
+
+    @GetMapping("/students")
+    public List<Student> students(){
+        return studentService.getStudents();
+    }
 }

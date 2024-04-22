@@ -1,6 +1,7 @@
 package com.example.springbootdemoapp.services;
 
 import com.example.springbootdemoapp.entitites.Student;
+import com.example.springbootdemoapp.repositories.StudentRepository;
 import com.github.javafaker.Faker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,12 @@ import java.util.List;
 @Service
 // @Component // this is also valid, but @Service is more specific and more readable
 public class StudentService {
+
+    private final StudentRepository studentRepository;
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
 
     public List<Student> get100RandomStudents() {
@@ -31,5 +38,10 @@ public class StudentService {
         }
 
         return students;
+    }
+
+    public List<Student> getStudents() {
+        List<Student> all = studentRepository.findAll();
+        return all;
     }
 }
