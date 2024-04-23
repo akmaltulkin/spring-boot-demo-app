@@ -1,16 +1,16 @@
 package com.example.springbootdemoapp.services;
 
 import com.example.springbootdemoapp.entitites.Student;
+import com.example.springbootdemoapp.exceptions.EmailTakenException;
+import com.example.springbootdemoapp.exceptions.StudentNotFoundException;
 import com.example.springbootdemoapp.repositories.StudentRepository;
 import com.github.javafaker.Faker;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -43,5 +43,23 @@ public class StudentService {
     public List<Student> getStudents() {
         List<Student> all = studentRepository.findAll();
         return all;
+    }
+
+    public Student getStudentById(Long id){
+        Optional<Student> byId = studentRepository.findById(id);
+        if(byId.isPresent()){
+            return byId.get();
+        } else {
+            throw new StudentNotFoundException("Student with id " + id + " not found");
+        }
+    }
+
+    public void addStudent(Student student) {
+
+        if (studentRepository.findStudentByEmail(student.getEmail()).isPresent()){
+            throw new EmailTakenException("Email taken");
+        }
+
+       studentRepository.save(student);
     }
 }
